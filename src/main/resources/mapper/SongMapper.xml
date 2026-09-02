@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.y261.dao.SongMapper">
+
+    <!-- 通用结果映射 -->
+    <resultMap id="BaseResultMap" type="com.y261.entity.Song">
+        <id column="id" property="id"/>
+        <result column="singer_id" property="singerId"/>
+        <result column="name" property="name"/>
+        <result column="introduction" property="introduction"/>
+        <result column="create_time" property="createTime"/>
+        <result column="update_time" property="updateTime"/>
+        <result column="pic" property="pic"/>
+        <result column="lyric" property="lyric"/>
+        <result column="url" property="url"/>
+    </resultMap>
+
+    <!-- 通用列 -->
+    <sql id="Base_Column_List">
+        id, singer_id, name, introduction, create_time, update_time, pic, lyric, url
+    </sql>
+
+    <!-- 根据歌曲名模糊查询 -->
+    <select id="selectByName" resultMap="BaseResultMap" parameterType="java.lang.String">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM song
+        <where>
+            <if test="name != null and name != ''">
+                AND name LIKE CONCAT('%', #{name}, '%')
+            </if>
+        </where>
+        ORDER BY create_time DESC
+    </select>
+
+    <!-- 根据歌手ID查询 -->
+    <select id="selectBySingerId" resultMap="BaseResultMap" parameterType="java.lang.Integer">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM song
+        WHERE singer_id = #{singerId}
+        ORDER BY create_time DESC
+    </select>
+
+    <!-- 根据歌单ID查询（联表 list_song） -->
+    <select id="selectBySongListId" resultMap="BaseResultMap" parameterType="java.lang.Integer">
+        SELECT s.id, s.singer_id, s.name, s.introduction, s.create_time, s.update_time, s.pic, s.lyric, s.url
+        FROM song s
+        INNER JOIN list_song ls ON ls.song_id = s.id
+        WHERE ls.song_list_id = #{songListId}
+        ORDER BY ls.id ASC
+    </select>
+
+</mapper>
