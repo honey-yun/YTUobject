@@ -1,5 +1,6 @@
 package com.y261.controller;
 
+import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.y261.common.Result;
 import com.y261.entity.Consumer;
 import com.y261.service.IConsumerService;
@@ -35,6 +36,44 @@ public class ConsumerController {
     public Result<List<Consumer>> all() {
         List<Consumer> list = consumerService.list();
         return Result.success("查询成功", list);
+    }
+
+    /**
+     * 分页查询用户
+     */
+    @GetMapping("/page")
+    public Result<IPage<Consumer>> page(
+            @RequestParam(defaultValue = "1") long current,
+            @RequestParam(defaultValue = "10") long size) {
+        IPage<Consumer> page = consumerService.pageQuery(current, size);
+        return Result.success("查询成功", page);
+    }
+
+    /**
+     * 按用户名关键字分页查询
+     */
+    @GetMapping("/page/search")
+    public Result<IPage<Consumer>> pageSearch(
+            @RequestParam(required = false) String keyword,
+            @RequestParam(defaultValue = "1") long current,
+            @RequestParam(defaultValue = "10") long size) {
+        IPage<Consumer> page = consumerService.pageByKeyword(keyword, current, size);
+        return Result.success("查询成功", page);
+    }
+
+    /**
+     * 多条件模糊分页查询（username/phone/location 模糊，sex 精确）
+     */
+    @GetMapping("/page/condition")
+    public Result<IPage<Consumer>> pageCondition(
+            @RequestParam(required = false) String username,
+            @RequestParam(required = false) String phone,
+            @RequestParam(required = false) Boolean sex,
+            @RequestParam(required = false) String location,
+            @RequestParam(defaultValue = "1") long current,
+            @RequestParam(defaultValue = "10") long size) {
+        IPage<Consumer> page = consumerService.pageByCondition(username, phone, sex, location, current, size);
+        return Result.success("查询成功", page);
     }
 
     /**

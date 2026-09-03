@@ -1,9 +1,13 @@
 package com.y261.service.impl;
 
+import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.y261.entity.Consumer;
 import com.y261.dao.ConsumerMapper;
 import com.y261.service.IConsumerService;
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
@@ -17,8 +21,49 @@ import java.time.LocalDateTime;
  * @author honey-yun
  * @since 2026-09-01
  */
+@Slf4j
 @Service
 public class ConsumerServiceImpl extends ServiceImpl<ConsumerMapper, Consumer> implements IConsumerService {
+
+    @Override
+    public IPage<Consumer> pageQuery(long current, long size) {
+        Page<Consumer> page = new Page<>(current, size);
+        LambdaQueryWrapper<Consumer> wrapper = new LambdaQueryWrapper<>();
+        wrapper.orderByDesc(Consumer::getCreateTime);
+        return page(page, wrapper);
+    }
+
+    @Override
+    public IPage<Consumer> pageByKeyword(String keyword, long current, long size) {
+        Page<Consumer> page = new Page<>(current, size);
+        LambdaQueryWrapper<Consumer> wrapper = new LambdaQueryWrapper<>();
+        if (StringUtils.hasText(keyword)) {
+            wrapper.like(Consumer::getUsername, keyword);
+        }
+        wrapper.orderByDesc(Consumer::getCreateTime);
+        return page(page, wrapper);
+    }
+
+    @Override
+    public IPage<Consumer> pageByCondition(String username, String phone, Boolean sex, String location,
+                                           long current, long size) {
+        Page<Consumer> page = new Page<>(current, size);
+        LambdaQueryWrapper<Consumer> wrapper = new LambdaQueryWrapper<>();
+        if (StringUtils.hasText(username)) {
+            wrapper.like(Consumer::getUsername, username);
+        }
+        if (StringUtils.hasText(phone)) {
+            wrapper.like(Consumer::getPhoneNum, phone);
+        }
+        if (sex != null) {
+            wrapper.eq(Consumer::getSex, sex);
+        }
+        if (StringUtils.hasText(location)) {
+            wrapper.like(Consumer::getLocation, location);
+        }
+        wrapper.orderByDesc(Consumer::getCreateTime);
+        return page(page, wrapper);
+    }
 
     @Override
     public Consumer selectByUsername(String username) {

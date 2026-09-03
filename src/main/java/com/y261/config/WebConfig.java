@@ -1,6 +1,6 @@
 package com.y261.config;
 
-import com.y261.interceptor.LoginInterceptor;
+import com.y261.common.LoginInterceptor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
@@ -35,6 +35,8 @@ public class WebConfig implements WebMvcConfigurer {
                         "/consumer/all",
                         "/consumer/username",
                         "/consumer/phone",
+                        "/consumer/page",
+                        "/consumer/page/**",
                         "/consumer/save",
                         "/consumer/saveOrUpdate",
                         "/song/**",

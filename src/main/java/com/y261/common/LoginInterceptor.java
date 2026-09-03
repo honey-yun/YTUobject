@@ -1,8 +1,6 @@
-package com.y261.interceptor;
+package com.y261.common;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.y261.common.LoginUser;
-import com.y261.common.Result;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.extern.slf4j.Slf4j;
