@@ -1,5 +1,6 @@
 package com.y261.exception;
 
+import com.y261.common.Result;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -14,15 +15,15 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(IllegalArgumentException.class)
     @ResponseBody
-    public String handleIllegalArgument(IllegalArgumentException e) {
+    public Result<Void> handleIllegalArgument(IllegalArgumentException e) {
         log.warn("参数异常: {}", e.getMessage());
-        return "参数错误: " + e.getMessage();
+        return Result.error("参数错误: " + e.getMessage());
     }
 
     @ExceptionHandler(Exception.class)
     @ResponseBody
-    public String handleException(Exception e) {
+    public Result<Void> handleException(Exception e) {
         log.error("系统异常", e);
-        return "系统异常: " + e.getMessage();
+        return Result.systemError();
     }
 }

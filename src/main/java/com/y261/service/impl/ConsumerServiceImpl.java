@@ -80,4 +80,12 @@ public class ConsumerServiceImpl extends ServiceImpl<ConsumerMapper, Consumer> i
         }
         return removeById(id);
     }
+
+    @Override
+    public boolean deleteBatch(java.util.List<Integer> ids) {
+        if (ids == null || ids.isEmpty()) {
+            return false;
+        }
+        return removeByIds(ids);
+    }
 }

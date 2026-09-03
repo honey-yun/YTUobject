@@ -44,4 +44,9 @@ public interface IConsumerService extends IService<Consumer> {
      * 根据主键删除
      */
     boolean deleteConsumer(Integer id);
+
+    /**
+     * 批量删除
+     */
+    boolean deleteBatch(java.util.List<Integer> ids);
 }
